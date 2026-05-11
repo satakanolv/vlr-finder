@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VLR Finder | Moon & Lavender</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">VLR Finder</div>
+        <div class="burger-menu" id="burger-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+        <nav class="nav-links">
+    <a href="#team-finder">Find Team</a>
+    <a href="#dashboard">Custom Lobbies</a>
+    <a href="#tournament-hub" id="tourney-link">Tournaments</a>
+</nav>
+        <div class="user-profile">
+            <span>nothingness</span>
+        </div>
+    </header>
+
+    <section id="screen-hero">
+        <h1 class="glow-text">Find Your Team</h1>
+        <p>Your vibe, your rules. No matter the server.</p>
+        <button id="search-btn">Start Searching</button>
+    </section>
+
+<section id="tournament-hub" class="hidden">
+    <div class="hero-content">
+        <h1 class="glow-text" style="font-size: 3rem;">Active Tournaments</h1>
+        <p>Find your duo or join a full squad for the upcoming majors.</p>
+    </div>
+    
+    <div id="tournaments-list" class="cards-container"></div>
+</section>
+
+    <section id="team-finder" class="hidden">
+        <h2>Available Teammates</h2>
+        <div id="players-list" class="cards-container">
+            </div>
+    </section>
+
+    <section id="dashboard" class="hidden">
+         <h2 class="section-title">Custom Games</h2>
+         <div id="custom-list" class="cards-container"></div> 
+    </section>
+
+    <section id="home" class="hidden">
+        <h2>Annoucements</h2>
+        <h2>News</h2>
+        <h2>Leaks</h2>
+    </section>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

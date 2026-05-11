@@ -1,0 +1,645 @@
+:root {
+--bg-main: #0B0E14;
+--bg-card: rgba(20, 22, 26, 0.65);
+--text-main: #E5E5E5;
+--text-sub: #8D8D8F;
+--accent: #FFFFFF;
+--border-soft: rgba(255, 255, 255, 0.08);
+}
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+scrollbar-width: none !important; /* Для Firefox */
+-ms-overflow-style: none !important; /* Для старого Edge */
+}
+
+*::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+body {
+background: radial-gradient(circle at center, #1b1e24 0%, #0d0f12 60%, var(--bg-main) 100%);
+background-attachment: fixed;
+color: var(--text-main);
+font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+overflow-x: hidden;
+line-height: 1.6;
+}
+
+.hidden { display: none !important; }
+
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(15px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- HEADER --- */
+.main-header {
+display: none; /* Показується через JS додаванням класу .show */
+position: fixed;
+top: 0;
+width: 100%;
+height: 75px;
+background: rgba(11, 14, 20, 0.85);
+backdrop-filter: blur(20px);
+border-bottom: 1px solid var(--border-soft);
+z-index: 1000;
+align-items: center;
+justify-content: space-between;
+padding: 0 60px;
+}
+
+.main-header.show { display: flex; animation: fadeIn 0.4s ease forwards; }
+
+.logo {
+font-size: 22px;
+font-weight: 900;
+color: #fff;
+letter-spacing: 2px;
+cursor: pointer;
+text-transform: uppercase;
+}
+
+.nav-links a {
+color: var(--text-sub);
+text-decoration: none;
+margin: 0 20px;
+font-size: 13px;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 1.5px;
+transition: all 0.3s ease;
+}
+
+.nav-links a:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+/* --- SECTIONS --- */
+section {
+padding-top: 130px;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+animation: fadeIn 0.6s ease-out;
+}
+
+#screen-hero {
+padding-top: 0;
+justify-content: center;
+text-align: center;
+}
+
+#screen-hero h1 {
+font-size: clamp(3rem, 10vw, 5.5rem);
+font-weight: 100;
+letter-spacing: 12px;
+text-transform: uppercase;
+margin-bottom: 20px;
+color: #fff;
+text-shadow: 0 0 40px rgba(255,255,255,0.15);
+}
+
+#screen-hero p {
+color: var(--text-sub);
+margin-bottom: 50px;
+font-size: 1.1rem;
+letter-spacing: 3px;
+text-transform: uppercase;
+}
+
+/* --- BUTTONS --- */
+#search-btn, .connect-btn {
+background: transparent;
+border: 1px solid #fff;
+color: #fff;
+padding: 16px 40px;
+border-radius: 4px;
+font-weight: 800;
+text-transform: uppercase;
+letter-spacing: 2px;
+cursor: pointer;
+transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+position: relative;
+overflow: hidden;
+}
+
+#search-btn:hover, .connect-btn:hover {
+background: #fff;
+color: #000;
+box-shadow: 0 0 30px rgba(255,255,255,0.2);
+transform: translateY(-2px);
+}
+
+.connect-btn {
+padding: 10px 22px;
+font-size: 0.75rem;
+}
+
+/* --- CARDS & LISTS --- */
+.cards-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 18px;
+width: 100%;
+padding: 20px;
+}
+
+.player-card, .tournament-card {
+background: var(--bg-card);
+backdrop-filter: blur(15px);
+-webkit-backdrop-filter: blur(15px);
+border: 1px solid var(--border-soft);
+border-radius: 14px;
+padding: 25px 40px;
+width: 100%;
+max-width: 750px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+transition: all 0.4s ease;
+}
+
+.player-card:hover {
+transform: scale(1.02) translateY(-4px);
+background: rgba(35, 37, 42, 0.8);
+border-color: rgba(255, 255, 255, 0.15);
+box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+}
+
+.player-card h3 {
+font-size: 1.3rem;
+font-weight: 800;
+letter-spacing: 1px;
+color: #fff;
+}
+
+.player-card small {
+color: var(--text-sub);
+text-transform: uppercase;
+font-size: 0.75rem;
+letter-spacing: 2px;
+font-weight: 600;
+}
+
+.player-card .slots-info {
+font-family: 'Inter', sans-serif;
+font-weight: 900;
+font-size: 1.1rem;
+color: #E5E5E5; /* Твій фірмовий колір тексту */
+text-align: center;
+letter-spacing: 1px;
+min-width: 80px;
+display: inline-block;
+margin-bottom: 5px; /* Щоб не липло до кнопки Join */
+}
+
+.player-card.customs {
+border-left: 4px solid #ffffff;
+box-shadow: inset 10px 0 15px -10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.05);
+display: grid; 
+grid-template-columns: 1fr 300px auto;
+}
+
+/* Робимо сітку для турнірів */
+/* 1. Обгортка секції (LIVE, Майбутні) */
+.tournaments-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 20px 0;
+}
+
+/* 2. Карусель (горизонтальний скрол) */
+.cards-grid {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 15px; /* Місце для скролбару */
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+}
+
+/* Приховуємо скролбар для краси (опціонально) */
+.cards-grid::-webkit-scrollbar { height: 6px; }
+.cards-grid::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+
+/* 3. КАРТКА ТУРНІРУ (наслідує твій стиль, але міняє габарити) */
+.tournament-card {
+    /* Базові стилі з твого .player-card */
+    background: var(--bg-card);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    transition: all 0.4s ease;
+    
+    /* Нові габарити (Вужчі та Вищі за гравців) */
+    flex: 0 0 340px; /* ФІКСОВАНА ШИРИНА як на Фігмі */
+    min-height: 180px; /* ТРОХИ ВИЩА за стандартну плашку */
+    padding: 20px;
+    margin: 10px;
+    
+    /* Робимо внутрішню сітку */
+    display: flex;
+    flex-direction: column; /* Тепер текст під картинкою */
+    scroll-snap-align: start;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05); 
+    
+    /* Додаємо той самий білий акцент зліва і внутрішнє світіння */
+    border-left: 4px solid #ffffff !important; 
+    box-shadow: inset 10px 0 15px -10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+.tournament-card:hover {
+    transform: scale(1.02) translateY(-4px);
+    background: rgba(35, 37, 42, 0.8);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+}
+
+/* 4. Внутрянка турніру */
+.tournament-card .card-image {
+    width: 100%;
+    height: 90px; /* Невелика картинка зверху */
+    background-size: cover;
+    background-position: center;
+    background-color: #222;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.tournament-card .status-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.tournament-card .tournament-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 10px 0;
+}
+
+.tournament-card .tournament-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-sub);
+    margin-bottom: 15px;
+}
+
+.tournament-card .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto; /* Притискаємо донизу */
+    width: 100%;
+}
+
+.tournament-card .teams-count {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 0.9rem;
+    color: #E5E5E5;
+}
+
+/* Стилізуємо кнопку, щоб була як у тебе */
+.tournament-card .request-btn {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Напівпрозора рамка */
+    padding: 6px 18px;
+    border-radius: 4px; /* Гостріші кути */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.75rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+        /* Фіксуємо ширину, щоб кнопка не "стрибала" */
+    width: 140px; 
+    /* Або min-width, якщо хочеш трохи гнучкості */
+    /* min-width: 130px; */
+    
+    /* Додаємо центрування тексту всередині, про всяк випадок */
+    text-align: center;
+    padding: 8px 0; /* Прибираємо бокові паддінги, бо ширина вже фіксована */
+    
+    /* Щоб текст не вилазив, якщо він занадто довгий */
+    font-size: 11px; 
+    white-space: nowrap;
+}
+
+.tournament-card .request-btn:hover {
+    background: #fff; /* При наведенні заливається білим */
+    color: #000;
+    border-color: #fff;
+}
+
+/* 1. Вбиваємо центрування для турнірів і розтягуємо контейнер */
+#tournaments-list.cards-container {
+    align-items: flex-start !important; /* Прибиваємо до лівого краю */
+    width: 100% !important;
+}
+
+/* 2. Секція (напр. "LIVE") має займати всю ширину */
+.status-section {
+    width: 100%;
+}
+
+/* 3. Сам грід із картками */
+.cards-grid {
+    display: flex;
+    justify-content: flex-start; /* Карточки йдуть зліва направо */
+    gap: 20px;
+    width: 100%; /* Розтягуємо трек для скролу на весь екран */
+    
+    /* ФІКС СКРОЛБАРУ */
+    overflow-x: auto; /* Скрол з'явиться ТІЛЬКИ якщо елементи вилізуть за межі */
+    padding-bottom: 15px; 
+}
+
+/* Робимо скролбар стильним, щоб не кидався в очі, коли він є */
+.cards-grid::-webkit-scrollbar {
+    height: 6px;
+}
+.cards-grid::-webkit-scrollbar-track {
+    background: transparent; /* Ховаємо слід скролбару */
+}
+.cards-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+}
+.cards-grid::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Ефект при наведенні (можна зробити червоним для вайбу, або лишити білим) */
+.tournament-card:hover {
+    transform: scale(1.02) translateY(-4px);
+    background: rgba(35, 37, 42, 0.8);
+    /* Змінюємо акцент на червоний при ховері (опціонально) */
+    border-left: 4px solid #ff4655 !important;
+    box-shadow: inset 10px 0 15px -10px rgba(255, 70, 85, 0.3), 0 20px 45px rgba(0,0,0,0.5);
+}
+/* --- RANKS --- */
+
+/* Radiant - Біле сяйво */
+.player-card.glow-radiant {
+border-left: 4px solid #fbf0b5;
+box-shadow: inset 10px 0 15px -10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+/* Immortal - Малиновий неон */
+.player-card.glow-immortal {
+border-left: 4px solid #BB3E61;
+box-shadow: inset 10px 0 20px -10px rgba(187, 62, 97, 0.4);
+}
+
+/* Ascendant - Смарагдовий */
+.player-card.glow-ascendant {
+border-left: 4px solid #48A07A;
+box-shadow: inset 10px 0 20px -10px rgba(72, 160, 122, 0.4);
+}
+
+/* Diamond - Фіолетово-блакитний */
+.player-card.glow-diamond {
+border-left: 4px solid #b784ff;
+box-shadow: inset 10px 0 20px -10px rgba(183, 132, 255, 0.3);
+}
+
+/* Platinum - Світло-синій */
+.player-card.glow-platinum {
+border-left: 4px solid #57A4AD;
+box-shadow: inset 10px 0 20px -10px rgba(87, 164, 173, 0.3);
+}
+
+/* Gold - Золотий */
+.player-card.glow-gold {
+border-left: 4px solid #E2B34E;
+box-shadow: inset 10px 0 20px -10px rgba(226, 179, 78, 0.2);
+}
+
+/* Iron - Сталевий/Сірий */
+.player-card.glow-iron {
+border-left: 4px solid #535353;
+box-shadow: inset 10px 0 15px -10px rgba(255, 255, 255, 0.1);
+}
+
+/* --- TOURNAMENT STYLES --- */
+.tournament-controls {
+margin-top: 30px;
+display: flex;
+flex-direction: column;
+gap: 15px;
+}
+
+.t-search {
+background: rgba(255,255,255,0.03);
+border: 1px solid var(--border-soft);
+color: #fff;
+padding: 12px 20px;
+border-radius: 6px;
+width: 300px;
+}
+
+.t-filters span {
+font-size: 11px;
+text-transform: uppercase;
+padding: 6px 12px;
+border: 1px solid var(--border-soft);
+margin: 0 5px;
+cursor: pointer;
+border-radius: 4px;
+}
+
+/* --- LEADERBOARD --- */
+.player-rank {
+background: var(--bg-card);
+border: 1px solid var(--border-soft);
+padding: 15px 30px;
+border-radius: 10px;
+width: 100%;
+max-width: 500px;
+margin-bottom: 10px;
+display: flex;
+justify-content: space-between;
+font-weight: 700;
+}
+
+.burger-menu {
+display: none; /* За замовчуванням він прихований на десктопах */
+cursor: pointer;
+background: none;
+border: none;
+padding: 0;
+z-index: 1000; /* Щоб він завжди був зверху */
+}
+
+.bar {
+display: block;
+width: 25px;
+height: 3px;
+margin: 5px auto;
+background-color: var(--vlr-text-color, white); /* Використовуй свій колір тексту */
+transition: all 0.3s ease-in-out; /* Анімація для перетворення на хрестик */
+}
+
+/* --- MOBILE ADAPTIVITY --- */
+@media (max-width: 830px) {
+.main-header { padding: 0 20px; }
+.player-card { flex-direction: column; text-align: center; gap: 20px; padding: 25px; }
+#screen-hero h1 { font-size: 2.5rem; letter-spacing: 5px; }
+.nav-links {
+display: none; /* Ховаємо список */
+}
+
+.burger-menu {
+display: block; /* Показуємо гамбургер */
+}
+
+/* Це щоб меню виїжджало зверху (для JS) */
+.nav-links.active {
+display: flex;
+flex-direction: column;
+justify-content: center; /* Центруємо пункти меню по вертикалі */
+align-items: center; /* Центруємо по горизонталі */
+opacity: 0;
+animation: fadeInMenu 0.4s forwards;
+position: fixed; /* Фіксуємо на весь екран */
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+/* Напівпрозорий чорний у стилі Riot (з ефектом блюру) */
+background-color: rgba(15, 25, 35, 0.95);
+backdrop-filter: blur(10px); /* Той самий ефект матового скла */
+z-index: 999; /* Щоб було поверх усього */
+gap: 30px;
+}
+
+@keyframes fadeInMenu {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+
+/* Робимо посилання великими, щоб зручно було тицяти пальцем */
+.nav-links.active li a {
+font-size: 2rem;
+letter-spacing: 3px;
+color: white;
+text-transform: uppercase;
+font-weight: 700;
+}
+/* Лого залишаємо зліва (order: 1) */
+.logo { order: 1; }
+
+/* Бургер посунемо в самий край справа */
+.burger-menu { order: 3; }
+
+/* Профіль (nothingness) ставимо між ними або притискаємо до бургера */
+.profile-section {
+order: 2;
+margin-left: auto; /* Це притисне профіль впритул до бургера */
+margin-right: 15px; /* Невеликий відступ між ними */
+}
+}
+
+/* SMURF TAG STYLES */
+.smurf-tag {
+background: #fff; /* Біла плашка */
+color: #000; /* Чорний текст */
+font-size: 10px;
+font-weight: 900;
+padding: 2px 8px;
+border-radius: 3px;
+margin-left: 12px;
+text-transform: uppercase;
+letter-spacing: 1px;
+display: inline-block;
+vertical-align: middle;
+box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+animation: pulse-smurf 1.5s infinite; /* Легке пульсування */
+}
+
+@keyframes pulse-smurf {
+0% { opacity: 1; }
+50% { opacity: 0.7; }
+100% { opacity: 1; }
+}
+
+.player-card span, .player-card .player-count {
+font-family: 'Inter', sans-serif;
+font-weight: 900;
+font-size: 1.1rem;
+color: #ff4655; /* Той самий червоний акцент */
+letter-spacing: 1px;
+text-align: center;
+flex-grow: 1; /* Це змусить цифри зайняти весь вільний простір по центру */
+}
+
+/* 1. ГЛОБАЛЬНИЙ ФЕЙД СПРАВА (для всіх горизонтальних каруселей) */
+/* .status-section — це обгортка твоїх рядів турнірів */
+.status-section {
+    -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+    mask-image: linear-gradient(to right, black 90%, transparent 100%);
+}
+
+/* Створюємо "туман", який завжди прибитий до низу вікна */
+body::after {
+    content: "";
+    position: fixed; /* Завжди на екрані, незалежно від скролу */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 120px; /* Висота фейду */
+    
+    /* Градієнт від кольору твого фону до прозорого. 
+       ЗАМІНИ #0f1115 на свій точний колір фону (або змінну var(--bg-main)) */
+    background: linear-gradient(to top, #0b0c10 0%, transparent 100%);
+    
+    pointer-events: none; /* НАДВАЖЛИВО: щоб цей туман не блокував кліки по картках */
+    z-index: 50; /* Щоб перекривав картки */
+}
+
+/* --- АКОРДЕОН ЗІ СТАТИСТИКОЮ --- */
+.player-card {
+    flex-direction: column; /* Змінюємо направлення, щоб статуа падала вниз */
+    cursor: pointer; /* Курсор-лапка, щоб було зрозуміло, що можна клікати */
+}
+
+.player-stats-dropdown {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+/* Коли JS додає клас .expanded — плавно показуємо статуа */
+.player-card.expanded .player-stats-dropdown {
+    max-height: 100px;
+    opacity: 1;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
