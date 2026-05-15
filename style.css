@@ -201,8 +201,12 @@ margin-bottom: 5px; /* Щоб не липло до кнопки Join */
 .player-card.customs {
 border-left: 4px solid #ffffff;
 box-shadow: inset 10px 0 15px -10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.05);
-display: grid; 
-grid-template-columns: 1fr 300px auto;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 15px;              
+text-align: center;
 }
 
 /* Робимо сітку для турнірів */
@@ -213,17 +217,20 @@ grid-template-columns: 1fr 300px auto;
     flex-direction: column;
     gap: 40px;
     padding: 20px 0;
+    /* No heavy properties here, keep layout light */
 }
-
-/* 2. Карусель (горизонтальний скрол) */
 .cards-grid {
     display: flex;
     gap: 20px;
     width: 100%;
     overflow-x: auto;
-    padding-bottom: 15px; /* Місце для скролбару */
+    padding: 20px;
+    scroll-padding: 20px;
+    padding-bottom: 15px; /* Minimal necessary for scrollbar */
     scroll-snap-type: x mandatory;
     scrollbar-width: thin;
+    justify-content: flex-start;
+    /* Remove duplicate rules for better performance */
 }
 
 /* Приховуємо скролбар для краси (опціонально) */
@@ -232,44 +239,42 @@ grid-template-columns: 1fr 300px auto;
 
 /* 3. КАРТКА ТУРНІРУ (наслідує твій стиль, але міняє габарити) */
 .tournament-card {
-    /* Базові стилі з твого .player-card */
     background: var(--bg-card);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid var(--border-soft);
+    border: 1px solid rgba(255,255,255,0.05);
     border-radius: 14px;
-    transition: all 0.4s ease;
-    
-    /* Нові габарити (Вужчі та Вищі за гравців) */
-    flex: 0 0 340px; /* ФІКСОВАНА ШИРИНА як на Фігмі */
-    min-height: 180px; /* ТРОХИ ВИЩА за стандартну плашку */
+    transition: 
+        transform 0.4s cubic-bezier(.4,0,.2,1),
+        background 0.4s cubic-bezier(.4,0,.2,1),
+        border-color 0.4s cubic-bezier(.4,0,.2,1);
+    flex: 0 0 340px;
+    min-height: 180px;
     padding: 20px;
-    margin: 10px;
-    
-    /* Робимо внутрішню сітку */
+    margin: 0;
     display: flex;
-    flex-direction: column; /* Тепер текст під картинкою */
+    flex-direction: column;
     scroll-snap-align: start;
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.05); 
-    
-    /* Додаємо той самий білий акцент зліва і внутрішнє світіння */
-    border-left: 4px solid #ffffff !important; 
-    box-shadow: inset 10px 0 15px -10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.05);
+    border-left: 4px solid #fff;
+    box-shadow: none;
+    filter: none;
+    /* Removed duplicated and !important rules, minimize repaints/reflows */
+    /* Avoid using backdrop-filter for performance, unless crucial for UI */
+    /* Prefer using opaque colors, but retain blur if UI truly needs it */
+    /* Remove -webkit-backdrop-filter for better cross-browser perf */
 }
-
 .tournament-card:hover {
     transform: scale(1.02) translateY(-4px);
-    background: rgba(35, 37, 42, 0.8);
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+    background: rgba(35,37,42,0.8);
+    border-left: 4px solid #ff4655;
+    border-color: rgba(255,255,255,0.15);
+    box-shadow: none;
+    filter: none;
+    /* Efficient state: Avoid !important, limit to necessary visual change */
 }
-
-/* 4. Внутрянка турніру */
 .tournament-card .card-image {
     width: 100%;
-    height: 90px; /* Невелика картинка зверху */
+    height: 90px;
     background-size: cover;
     background-position: center;
     background-color: #222;
@@ -277,7 +282,6 @@ grid-template-columns: 1fr 300px auto;
     margin-bottom: 15px;
     position: relative;
 }
-
 .tournament-card .status-badge {
     position: absolute;
     top: 5px;
@@ -289,14 +293,12 @@ grid-template-columns: 1fr 300px auto;
     border-radius: 4px;
     text-transform: uppercase;
 }
-
 .tournament-card .tournament-title {
     font-size: 1.2rem;
     font-weight: 800;
     color: #fff;
     margin: 0 0 10px 0;
 }
-
 .tournament-card .tournament-info {
     display: flex;
     justify-content: space-between;
@@ -304,100 +306,61 @@ grid-template-columns: 1fr 300px auto;
     color: var(--text-sub);
     margin-bottom: 15px;
 }
-
 .tournament-card .card-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: auto; /* Притискаємо донизу */
+    margin-top: auto;
+    gap: 20px;
     width: 100%;
 }
-
 .tournament-card .teams-count {
     font-family: 'Inter', sans-serif;
     font-weight: 900;
     font-size: 0.9rem;
     color: #E5E5E5;
 }
-
-/* Стилізуємо кнопку, щоб була як у тебе */
 .tournament-card .request-btn {
     background: transparent;
+    border: 1px solid #fff;
     color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.5); /* Напівпрозора рамка */
-    padding: 6px 18px;
-    border-radius: 4px; /* Гостріші кути */
+    border: 1px solid rgba(255,255,255,0.5);
+    height: 25px;
+    border-radius: 4px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-size: 0.75rem;
-    transition: all 0.3s ease;
-    cursor: pointer;
-        /* Фіксуємо ширину, щоб кнопка не "стрибала" */
-    width: 140px; 
-    /* Або min-width, якщо хочеш трохи гнучкості */
-    /* min-width: 130px; */
-    
-    /* Додаємо центрування тексту всередині, про всяк випадок */
-    text-align: center;
-    padding: 8px 0; /* Прибираємо бокові паддінги, бо ширина вже фіксована */
-    
-    /* Щоб текст не вилазив, якщо він занадто довгий */
     font-size: 11px; 
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    overflow: hidden;
+    font-size: 0.75rem;           /* Match .connect-btn from .player-card, which is a button */
+    width: 140px;
+    text-align: center;
     white-space: nowrap;
 }
 
 .tournament-card .request-btn:hover {
-    background: #fff; /* При наведенні заливається білим */
+    background: #fff;
     color: #000;
-    border-color: #fff;
+    box-shadow: 0 0 30px rgba(255,255,255,0.2);
+    transform: translateY(-2px);
 }
-
-/* 1. Вбиваємо центрування для турнірів і розтягуємо контейнер */
 #tournaments-list.cards-container {
-    align-items: flex-start !important; /* Прибиваємо до лівого краю */
-    width: 100% !important;
+    align-items: flex-start;
+    width: 100%;
 }
-
-/* 2. Секція (напр. "LIVE") має займати всю ширину */
 .status-section {
     width: 100%;
 }
-
-/* 3. Сам грід із картками */
-.cards-grid {
-    display: flex;
-    justify-content: flex-start; /* Карточки йдуть зліва направо */
-    gap: 20px;
-    width: 100%; /* Розтягуємо трек для скролу на весь екран */
-    
-    /* ФІКС СКРОЛБАРУ */
-    overflow-x: auto; /* Скрол з'явиться ТІЛЬКИ якщо елементи вилізуть за межі */
-    padding-bottom: 15px; 
-}
-
-/* Робимо скролбар стильним, щоб не кидався в очі, коли він є */
-.cards-grid::-webkit-scrollbar {
-    height: 6px;
-}
-.cards-grid::-webkit-scrollbar-track {
-    background: transparent; /* Ховаємо слід скролбару */
-}
-.cards-grid::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 10px;
-}
-.cards-grid::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
-/* Ефект при наведенні (можна зробити червоним для вайбу, або лишити білим) */
 .tournament-card:hover {
     transform: scale(1.02) translateY(-4px);
     background: rgba(35, 37, 42, 0.8);
-    /* Змінюємо акцент на червоний при ховері (опціонально) */
-    border-left: 4px solid #ff4655 !important;
-    box-shadow: inset 10px 0 15px -10px rgba(255, 70, 85, 0.3), 0 20px 45px rgba(0,0,0,0.5);
+    border-left: 4px solid #b3b2b2 !important;
+    box-shadow: none !important;
+    filter: none !important;
 }
 /* --- RANKS --- */
 
