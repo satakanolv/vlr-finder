@@ -11,8 +11,8 @@
 margin: 0;
 padding: 0;
 box-sizing: border-box;
-scrollbar-width: none !important; /* Для Firefox */
--ms-overflow-style: none !important; /* Для старого Edge */
+scrollbar-width: none !important;
+-ms-overflow-style: none !important;
 }
 
 *::-webkit-scrollbar {
@@ -37,9 +37,8 @@ from { opacity: 0; transform: translateY(15px); }
 to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- HEADER --- */
 .main-header {
-display: none; /* Показується через JS додаванням класу .show */
+display: none;
 position: fixed;
 top: 0;
 width: 100%;
@@ -64,7 +63,7 @@ cursor: pointer;
 text-transform: uppercase;
 }
 
-.nav-links a {
+.nav-links a, .user-profile {
 color: var(--text-sub);
 text-decoration: none;
 margin: 0 20px;
@@ -75,9 +74,8 @@ letter-spacing: 1.5px;
 transition: all 0.3s ease;
 }
 
-.nav-links a:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+.nav-links a:hover, .user-profile:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
-/* --- SECTIONS --- */
 section {
 padding-top: 130px;
 min-height: 100vh;
@@ -111,7 +109,6 @@ letter-spacing: 3px;
 text-transform: uppercase;
 }
 
-/* --- BUTTONS --- */
 #search-btn, .connect-btn {
 background: transparent;
 border: 1px solid #fff;
@@ -139,7 +136,6 @@ padding: 10px 22px;
 font-size: 0.75rem;
 }
 
-/* --- CARDS & LISTS --- */
 .cards-container {
 display: flex;
 flex-direction: column;
@@ -190,12 +186,12 @@ font-weight: 600;
 font-family: 'Inter', sans-serif;
 font-weight: 900;
 font-size: 1.1rem;
-color: #E5E5E5; /* Твій фірмовий колір тексту */
+color: #E5E5E5;
 text-align: center;
 letter-spacing: 1px;
 min-width: 80px;
 display: inline-block;
-margin-bottom: 5px; /* Щоб не липло до кнопки Join */
+margin-bottom: 5px;
 }
 
 .player-card.customs {
@@ -205,19 +201,16 @@ display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
-gap: 15px;              
+gap: 15px;
 text-align: center;
 }
 
-/* Робимо сітку для турнірів */
-/* 1. Обгортка секції (LIVE, Майбутні) */
 .tournaments-wrapper {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 40px;
     padding: 20px 0;
-    /* No heavy properties here, keep layout light */
 }
 .cards-grid {
     display: flex;
@@ -226,18 +219,15 @@ text-align: center;
     overflow-x: auto;
     padding: 20px;
     scroll-padding: 20px;
-    padding-bottom: 15px; /* Minimal necessary for scrollbar */
+    padding-bottom: 15px;
     scroll-snap-type: x mandatory;
     scrollbar-width: thin;
     justify-content: flex-start;
-    /* Remove duplicate rules for better performance */
 }
 
-/* Приховуємо скролбар для краси (опціонально) */
 .cards-grid::-webkit-scrollbar { height: 6px; }
 .cards-grid::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
 
-/* 3. КАРТКА ТУРНІРУ (наслідує твій стиль, але міняє габарити) */
 .tournament-card {
     background: var(--bg-card);
     border: 1px solid rgba(255,255,255,0.05);
@@ -258,10 +248,6 @@ text-align: center;
     border-left: 4px solid #fff;
     box-shadow: none;
     filter: none;
-    /* Removed duplicated and !important rules, minimize repaints/reflows */
-    /* Avoid using backdrop-filter for performance, unless crucial for UI */
-    /* Prefer using opaque colors, but retain blur if UI truly needs it */
-    /* Remove -webkit-backdrop-filter for better cross-browser perf */
 }
 .tournament-card:hover {
     transform: scale(1.02) translateY(-4px);
@@ -270,7 +256,6 @@ text-align: center;
     border-color: rgba(255,255,255,0.15);
     box-shadow: none;
     filter: none;
-    /* Efficient state: Avoid !important, limit to necessary visual change */
 }
 .tournament-card .card-image {
     width: 100%;
@@ -330,13 +315,13 @@ text-align: center;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-size: 11px; 
+    font-size: 11px;
     transition: background 0.3s, color 0.3s, border-color 0.3s;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     position: relative;
     overflow: hidden;
-    font-size: 0.75rem;           /* Match .connect-btn from .player-card, which is a button */
+    font-size: 0.75rem;
     width: 140px;
     text-align: center;
     white-space: nowrap;
@@ -362,51 +347,42 @@ text-align: center;
     box-shadow: none !important;
     filter: none !important;
 }
-/* --- RANKS --- */
 
-/* Radiant - Біле сяйво */
 .player-card.glow-radiant {
 border-left: 4px solid #fbf0b5;
 box-shadow: inset 10px 0 15px -10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.05);
 }
 
-/* Immortal - Малиновий неон */
 .player-card.glow-immortal {
 border-left: 4px solid #BB3E61;
 box-shadow: inset 10px 0 20px -10px rgba(187, 62, 97, 0.4);
 }
 
-/* Ascendant - Смарагдовий */
 .player-card.glow-ascendant {
 border-left: 4px solid #48A07A;
 box-shadow: inset 10px 0 20px -10px rgba(72, 160, 122, 0.4);
 }
 
-/* Diamond - Фіолетово-блакитний */
 .player-card.glow-diamond {
 border-left: 4px solid #b784ff;
 box-shadow: inset 10px 0 20px -10px rgba(183, 132, 255, 0.3);
 }
 
-/* Platinum - Світло-синій */
 .player-card.glow-platinum {
 border-left: 4px solid #57A4AD;
 box-shadow: inset 10px 0 20px -10px rgba(87, 164, 173, 0.3);
 }
 
-/* Gold - Золотий */
 .player-card.glow-gold {
 border-left: 4px solid #E2B34E;
 box-shadow: inset 10px 0 20px -10px rgba(226, 179, 78, 0.2);
 }
 
-/* Iron - Сталевий/Сірий */
 .player-card.glow-iron {
 border-left: 4px solid #535353;
 box-shadow: inset 10px 0 15px -10px rgba(255, 255, 255, 0.1);
 }
 
-/* --- TOURNAMENT STYLES --- */
 .tournament-controls {
 margin-top: 30px;
 display: flex;
@@ -433,7 +409,6 @@ cursor: pointer;
 border-radius: 4px;
 }
 
-/* --- LEADERBOARD --- */
 .player-rank {
 background: var(--bg-card);
 border: 1px solid var(--border-soft);
@@ -448,12 +423,12 @@ font-weight: 700;
 }
 
 .burger-menu {
-display: none; /* За замовчуванням він прихований на десктопах */
+display: none;
 cursor: pointer;
 background: none;
 border: none;
 padding: 0;
-z-index: 1000; /* Щоб він завжди був зверху */
+z-index: 1000;
 }
 
 .bar {
@@ -461,40 +436,37 @@ display: block;
 width: 25px;
 height: 3px;
 margin: 5px auto;
-background-color: var(--vlr-text-color, white); /* Використовуй свій колір тексту */
-transition: all 0.3s ease-in-out; /* Анімація для перетворення на хрестик */
+background-color: var(--vlr-text-color, white);
+transition: all 0.3s ease-in-out;
 }
 
-/* --- MOBILE ADAPTIVITY --- */
 @media (max-width: 830px) {
 .main-header { padding: 0 20px; }
 .player-card { flex-direction: column; text-align: center; gap: 20px; padding: 25px; }
 #screen-hero h1 { font-size: 2.5rem; letter-spacing: 5px; }
 .nav-links {
-display: none; /* Ховаємо список */
+display: none;
 }
 
 .burger-menu {
-display: block; /* Показуємо гамбургер */
+display: block;
 }
 
-/* Це щоб меню виїжджало зверху (для JS) */
 .nav-links.active {
 display: flex;
 flex-direction: column;
-justify-content: center; /* Центруємо пункти меню по вертикалі */
-align-items: center; /* Центруємо по горизонталі */
+justify-content: center;
+align-items: center;
 opacity: 0;
 animation: fadeInMenu 0.4s forwards;
-position: fixed; /* Фіксуємо на весь екран */
+position: fixed;
 top: 0;
 left: 0;
 width: 100vw;
 height: 100vh;
-/* Напівпрозорий чорний у стилі Riot (з ефектом блюру) */
 background-color: rgba(15, 25, 35, 0.95);
-backdrop-filter: blur(10px); /* Той самий ефект матового скла */
-z-index: 999; /* Щоб було поверх усього */
+backdrop-filter: blur(10px);
+z-index: 999;
 gap: 30px;
 }
 
@@ -503,7 +475,6 @@ from { opacity: 0; }
 to { opacity: 1; }
 }
 
-/* Робимо посилання великими, щоб зручно було тицяти пальцем */
 .nav-links.active li a {
 font-size: 2rem;
 letter-spacing: 3px;
@@ -511,24 +482,18 @@ color: white;
 text-transform: uppercase;
 font-weight: 700;
 }
-/* Лого залишаємо зліва (order: 1) */
 .logo { order: 1; }
-
-/* Бургер посунемо в самий край справа */
 .burger-menu { order: 3; }
-
-/* Профіль (nothingness) ставимо між ними або притискаємо до бургера */
 .profile-section {
 order: 2;
-margin-left: auto; /* Це притисне профіль впритул до бургера */
-margin-right: 15px; /* Невеликий відступ між ними */
+margin-left: auto;
+margin-right: 15px;
 }
 }
 
-/* SMURF TAG STYLES */
 .smurf-tag {
-background: #fff; /* Біла плашка */
-color: #000; /* Чорний текст */
+background: #fff;
+color: #000;
 font-size: 10px;
 font-weight: 900;
 padding: 2px 8px;
@@ -539,7 +504,7 @@ letter-spacing: 1px;
 display: inline-block;
 vertical-align: middle;
 box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-animation: pulse-smurf 1.5s infinite; /* Легке пульсування */
+animation: pulse-smurf 1.5s infinite;
 }
 
 @keyframes pulse-smurf {
@@ -552,40 +517,32 @@ animation: pulse-smurf 1.5s infinite; /* Легке пульсування */
 font-family: 'Inter', sans-serif;
 font-weight: 900;
 font-size: 1.1rem;
-color: #ff4655; /* Той самий червоний акцент */
+color: #ff4655;
 letter-spacing: 1px;
 text-align: center;
-flex-grow: 1; /* Це змусить цифри зайняти весь вільний простір по центру */
+flex-grow: 1;
 }
 
-/* 1. ГЛОБАЛЬНИЙ ФЕЙД СПРАВА (для всіх горизонтальних каруселей) */
-/* .status-section — це обгортка твоїх рядів турнірів */
 .status-section {
     -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
     mask-image: linear-gradient(to right, black 90%, transparent 100%);
 }
 
-/* Створюємо "туман", який завжди прибитий до низу вікна */
 body::after {
     content: "";
-    position: fixed; /* Завжди на екрані, незалежно від скролу */
+    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 120px; /* Висота фейду */
-    
-    /* Градієнт від кольору твого фону до прозорого. 
-       ЗАМІНИ #0f1115 на свій точний колір фону (або змінну var(--bg-main)) */
+    height: 120px;
     background: linear-gradient(to top, #0b0c10 0%, transparent 100%);
-    
-    pointer-events: none; /* НАДВАЖЛИВО: щоб цей туман не блокував кліки по картках */
-    z-index: 50; /* Щоб перекривав картки */
+    pointer-events: none;
+    z-index: 50;
 }
 
-/* --- АКОРДЕОН ЗІ СТАТИСТИКОЮ --- */
 .player-card {
-    flex-direction: column; /* Змінюємо направлення, щоб статуа падала вниз */
-    cursor: pointer; /* Курсор-лапка, щоб було зрозуміло, що можна клікати */
+    flex-direction: column;
+    cursor: pointer;
 }
 
 .player-stats-dropdown {
@@ -598,7 +555,6 @@ body::after {
     transition: all 0.4s ease;
 }
 
-/* Коли JS додає клас .expanded — плавно показуємо статуа */
 .player-card.expanded .player-stats-dropdown {
     max-height: 100px;
     opacity: 1;

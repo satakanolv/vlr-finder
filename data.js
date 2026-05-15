@@ -68,7 +68,8 @@ export const customMatches = [
         map: "Ascent",
         rank: "Immortal+",
         players: "8/10",
-        status: "Open"
+        status: "Open",
+        mapImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLoQRAn4Epc0jcy7jWeg-fegGlZpvpc_LeCA&s"
     },
     {
         id: 2,
@@ -76,7 +77,8 @@ export const customMatches = [
         map: "Haven",
         rank: "Any",
         players: "4/10",
-        status: "Open"
+        status: "Open",
+        mapImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR92QZi8R-rM6H_7Q-Ez6WvYfHYumbCzrCpQg&s"
     }
 ];
 
@@ -238,3 +240,47 @@ export const tournaments = [
         image: ""
     }
 ];
+
+export const userProfileStats = {
+    profile: {
+      nickname: "nothingness",
+      tag: "#kiss",
+      currentRank: "Gold 3",
+      rr: 39,
+      peakRank: "Gold 3",
+      rankImage: "https://imgsvc.trackercdn.com/url/max-width(96),quality(70)/https%3A%2F%2Ftrackercdn.com%2Fcdn%2Ftracker.gg%2Fvalorant%2Ficons%2Ftiersv2%2F14.png/image.png",
+      playerCard: "https://valorantinfo.com/images/us/vct-2026-pacific-card_valorant_art_114198.webp"
+    },
+    performance: {
+      winRate: "40.7%",
+      matchesPlayed: 59,
+      wins: 24,
+      losses: 35,
+      kdRatio: 0.99,
+      kills: 1074,
+      deaths: 1085,
+      assists: 244,
+      headshotPercentage: "25.6%",
+      headshotsHits: 781,
+      adr: 23.5, // Average Damage per Round
+      acs: 250,  // Average Combat Score
+      firstBloods: 67
+    },
+    favoriteWeapon: "Vandal",
+    topAgents: [
+      { name: "Jett", matches: 50, winRate: "34%", kd: "1.05", image: 'https://media.valorant-api.com/agents/add6443a-41bd-e414-f6ad-e58d267f4e95/displayicon.png' },
+      { name: "Reyna", matches: 3, winRate: "33.3%", kd: "1.22", image: 'https://media.valorant-api.com/agents/a3bfb853-43b2-7238-a4f1-ad90e9e46bcc/displayicon.png' },
+      { name: "Chamber", matches: 3, winRate: "100%", kd: "1.60", image: 'https://imgsvc.trackercdn.com/url/max-width(120),quality(100)/https%3A%2F%2Ftitles.trackercdn.com%2Fvalorant-api%2Fagents%2F22697a3d-45bf-8dd7-4fec-84a9e28c69d7%2Fdisplayicon.png/image.png' }
+    ],
+    topMaps: [
+        { name: "Ascent", matches: 20, winRate: "65%", image: "https://media.valorant-api.com/maps/7eaecc1b-4337-bbf6-6ab9-04b8f06b3319/listviewicon.png" },
+        { name: "Bind", matches: 15, winRate: "55%", image: "https://media.valorant-api.com/maps/2c9d57ec-4431-9c5e-2939-8f9ef6dd5cba/listviewicon.png" },
+        { name: "Icebox", matches: 10, winRate: "40%", image: "https://wallpapercave.com/wp/wp12296792.png" }
+      ],
+      topRoles: [
+        { name: "Duelist", matches: 45, winRate: "50%" },
+        { name: "Initiator", matches: 10, winRate: "45%" },
+        { name: "Sentinel", matches: 4, winRate: "20%" }
+      ],
+    recentTrendRR: [+17, -17, -13, +14, -12, +26, -14, +23, +18, +18]
+  }
