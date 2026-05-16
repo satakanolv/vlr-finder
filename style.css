@@ -11,8 +11,8 @@
 margin: 0;
 padding: 0;
 box-sizing: border-box;
-scrollbar-width: none !important;
--ms-overflow-style: none !important;
+scrollbar-width: none !important; /* Для Firefox */
+-ms-overflow-style: none !important; /* Для старого Edge */
 }
 
 *::-webkit-scrollbar {
@@ -37,8 +37,9 @@ from { opacity: 0; transform: translateY(15px); }
 to { opacity: 1; transform: translateY(0); }
 }
 
+/* --- HEADER --- */
 .main-header {
-display: none;
+display: none; /* Показується через JS додаванням класу .show */
 position: fixed;
 top: 0;
 width: 100%;
@@ -63,7 +64,7 @@ cursor: pointer;
 text-transform: uppercase;
 }
 
-.nav-links a, .user-profile {
+.nav-links a {
 color: var(--text-sub);
 text-decoration: none;
 margin: 0 20px;
@@ -74,8 +75,9 @@ letter-spacing: 1.5px;
 transition: all 0.3s ease;
 }
 
-.nav-links a:hover, .user-profile:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+.nav-links a:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
+/* --- SECTIONS --- */
 section {
 padding-top: 130px;
 min-height: 100vh;
@@ -109,6 +111,7 @@ letter-spacing: 3px;
 text-transform: uppercase;
 }
 
+/* --- BUTTONS --- */
 #search-btn, .connect-btn {
 background: transparent;
 border: 1px solid #fff;
@@ -136,6 +139,7 @@ padding: 10px 22px;
 font-size: 0.75rem;
 }
 
+/* --- CARDS & LISTS --- */
 .cards-container {
 display: flex;
 flex-direction: column;
@@ -186,25 +190,62 @@ font-weight: 600;
 font-family: 'Inter', sans-serif;
 font-weight: 900;
 font-size: 1.1rem;
-color: #E5E5E5;
+color: #E5E5E5; /* Твій фірмовий колір тексту */
 text-align: center;
 letter-spacing: 1px;
 min-width: 80px;
 display: inline-block;
-margin-bottom: 5px;
+margin-bottom: 5px; /* Щоб не липло до кнопки Join */
 }
 
+/* Оновлений головний клас картки з деплою + налаштування для фону */
 .player-card.customs {
-border-left: 4px solid #ffffff;
-box-shadow: inset 10px 0 15px -10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.05);
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-gap: 15px;
-text-align: center;
+    border-left: 4px solid #ffffff;
+    box-shadow: inset 10px 0 15px -10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    text-align: center;
+    
+    /* Додано для фічі з фоном та банером */
+    position: relative;
+    overflow: hidden;
 }
 
+/* Логіка фонової картинки */
+.player-card.customs .customs-card-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: var(--custom-match-map-image, none);
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+}
+
+.player-card.customs .customs-card-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(11, 14, 20, 0.88) 0%,
+        rgba(11, 14, 20, 0.72) 100%
+    );
+}
+
+/* Піднімаємо текст і кнопку над фоном */
+.player-card.customs .card-info,
+.player-card.customs .slots-info,
+.player-card.customs .card-actions {
+    position: relative;
+    z-index: 1;
+}
+
+/* Робимо сітку для турнірів */
+/* 1. Обгортка секції (LIVE, Майбутні) */
 .tournaments-wrapper {
     width: 100%;
     display: flex;
@@ -347,42 +388,51 @@ text-align: center;
     box-shadow: none !important;
     filter: none !important;
 }
+/* --- RANKS --- */
 
+/* Radiant - Біле сяйво */
 .player-card.glow-radiant {
 border-left: 4px solid #fbf0b5;
 box-shadow: inset 10px 0 15px -10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.05);
 }
 
+/* Immortal - Малиновий неон */
 .player-card.glow-immortal {
 border-left: 4px solid #BB3E61;
 box-shadow: inset 10px 0 20px -10px rgba(187, 62, 97, 0.4);
 }
 
+/* Ascendant - Смарагдовий */
 .player-card.glow-ascendant {
 border-left: 4px solid #48A07A;
 box-shadow: inset 10px 0 20px -10px rgba(72, 160, 122, 0.4);
 }
 
+/* Diamond - Фіолетово-блакитний */
 .player-card.glow-diamond {
 border-left: 4px solid #b784ff;
 box-shadow: inset 10px 0 20px -10px rgba(183, 132, 255, 0.3);
 }
 
+/* Platinum - Світло-синій */
 .player-card.glow-platinum {
 border-left: 4px solid #57A4AD;
 box-shadow: inset 10px 0 20px -10px rgba(87, 164, 173, 0.3);
 }
 
+/* Gold - Золотий */
 .player-card.glow-gold {
 border-left: 4px solid #E2B34E;
 box-shadow: inset 10px 0 20px -10px rgba(226, 179, 78, 0.2);
 }
 
+/* Iron - Сталевий/Сірий */
 .player-card.glow-iron {
 border-left: 4px solid #535353;
 box-shadow: inset 10px 0 15px -10px rgba(255, 255, 255, 0.1);
 }
 
+/* --- TOURNAMENT STYLES --- */
 .tournament-controls {
 margin-top: 30px;
 display: flex;
@@ -409,6 +459,7 @@ cursor: pointer;
 border-radius: 4px;
 }
 
+/* --- LEADERBOARD --- */
 .player-rank {
 background: var(--bg-card);
 border: 1px solid var(--border-soft);
@@ -423,12 +474,12 @@ font-weight: 700;
 }
 
 .burger-menu {
-display: none;
+display: none; /* За замовчуванням він прихований на десктопах */
 cursor: pointer;
 background: none;
 border: none;
 padding: 0;
-z-index: 1000;
+z-index: 1000; /* Щоб він завжди був зверху */
 }
 
 .bar {
@@ -436,64 +487,17 @@ display: block;
 width: 25px;
 height: 3px;
 margin: 5px auto;
-background-color: var(--vlr-text-color, white);
-transition: all 0.3s ease-in-out;
+background-color: var(--vlr-text-color, white); /* Використовуй свій колір тексту */
+transition: all 0.3s ease-in-out; /* Анімація для перетворення на хрестик */
 }
 
-@media (max-width: 830px) {
-.main-header { padding: 0 20px; }
-.player-card { flex-direction: column; text-align: center; gap: 20px; padding: 25px; }
-#screen-hero h1 { font-size: 2.5rem; letter-spacing: 5px; }
-.nav-links {
-display: none;
-}
+/* --- MOBILE ADAPTIVITY --- */
 
-.burger-menu {
-display: block;
-}
 
-.nav-links.active {
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-opacity: 0;
-animation: fadeInMenu 0.4s forwards;
-position: fixed;
-top: 0;
-left: 0;
-width: 100vw;
-height: 100vh;
-background-color: rgba(15, 25, 35, 0.95);
-backdrop-filter: blur(10px);
-z-index: 999;
-gap: 30px;
-}
-
-@keyframes fadeInMenu {
-from { opacity: 0; }
-to { opacity: 1; }
-}
-
-.nav-links.active li a {
-font-size: 2rem;
-letter-spacing: 3px;
-color: white;
-text-transform: uppercase;
-font-weight: 700;
-}
-.logo { order: 1; }
-.burger-menu { order: 3; }
-.profile-section {
-order: 2;
-margin-left: auto;
-margin-right: 15px;
-}
-}
-
+/* SMURF TAG STYLES */
 .smurf-tag {
-background: #fff;
-color: #000;
+background: #fff; /* Біла плашка */
+color: #000; /* Чорний текст */
 font-size: 10px;
 font-weight: 900;
 padding: 2px 8px;
@@ -504,7 +508,7 @@ letter-spacing: 1px;
 display: inline-block;
 vertical-align: middle;
 box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-animation: pulse-smurf 1.5s infinite;
+animation: pulse-smurf 1.5s infinite; /* Легке пульсування */
 }
 
 @keyframes pulse-smurf {
@@ -517,30 +521,38 @@ animation: pulse-smurf 1.5s infinite;
 font-family: 'Inter', sans-serif;
 font-weight: 900;
 font-size: 1.1rem;
-color: #ff4655;
+color: #ff4655; /* Той самий червоний акцент */
 letter-spacing: 1px;
 text-align: center;
-flex-grow: 1;
+flex-grow: 1; /* Це змусить цифри зайняти весь вільний простір по центру */
 }
 
+/* 1. ГЛОБАЛЬНИЙ ФЕЙД СПРАВА (для всіх горизонтальних каруселей) */
+/* .status-section — це обгортка твоїх рядів турнірів */
 .status-section {
     -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
     mask-image: linear-gradient(to right, black 90%, transparent 100%);
 }
 
+/* Створюємо "туман", який завжди прибитий до низу вікна */
 body::after {
     content: "";
-    position: fixed;
+    position: fixed; /* Завжди на екрані, незалежно від скролу */
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 120px;
+    height: 120px; /* Висота фейду */
+    
+    /* Градієнт від кольору твого фону до прозорого. 
+       ЗАМІНИ #0f1115 на свій точний колір фону (або змінну var(--bg-main)) */
     background: linear-gradient(to top, #0b0c10 0%, transparent 100%);
-    pointer-events: none;
-    z-index: 50;
+    
+    pointer-events: none; /* НАДВАЖЛИВО: щоб цей туман не блокував кліки по картках */
+    z-index: 50; /* Щоб перекривав картки */
 }
 
-.player-card {
+/* --- АКОРДЕОН ЗІ СТАТИСТИКОЮ (лише картки гравців, не customs) --- */
+#players-list .player-card {
     flex-direction: column;
     cursor: pointer;
 }
@@ -555,6 +567,7 @@ body::after {
     transition: all 0.4s ease;
 }
 
+/* Коли JS додає клас .expanded — плавно показуємо статуа */
 .player-card.expanded .player-stats-dropdown {
     max-height: 100px;
     opacity: 1;
@@ -562,3 +575,458 @@ body::after {
     padding-top: 15px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
+
+/* --- Profile Bento (desktop) --- */
+.profile-bento-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.profile-banner {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background:
+        linear-gradient(to right, rgba(18, 18, 22, 0.95) 30%, rgba(18, 18, 22, 0.4)),
+        var(--profile-banner-image, none) center / cover no-repeat;
+    border-radius: 20px;
+    padding: 35px 30px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-left: 4px solid #e2b34e;
+    min-height: 120px;
+    box-sizing: border-box;
+}
+
+.profile-banner__title {
+    margin: 0;
+    color: #fff;
+    font-size: 2.2rem;
+    letter-spacing: 1px;
+}
+
+.profile-banner__tag {
+    color: var(--text-sub);
+    font-size: 1.4rem;
+}
+
+.profile-banner__aside {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-banner__rank-meta {
+    text-align: right;
+}
+
+.profile-banner__rank-name {
+    color: #e2b34e;
+    font-weight: 800;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+}
+
+.profile-banner__rr-line {
+    color: var(--text-sub);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+.profile-banner__sep {
+    margin: 0 5px;
+}
+
+.profile-banner__rank-icon {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-banner__rank-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.profile-bento-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-bento-card {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-sizing: border-box;
+}
+
+.profile-section-title {
+    font-size: 1.1rem;
+    color: var(--text-sub);
+    margin: 0 0 15px;
+    font-weight: 700;
+}
+
+.profile-section-title--compact {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.profile-performance-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.profile-stat-cell {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    box-shadow:
+        inset 3px 3px 6px rgba(0, 0, 0, 0.6),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.03);
+}
+
+.profile-stat-cell__label {
+    font-size: 10px;
+    color: var(--text-sub);
+    margin-bottom: 5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.profile-stat-cell__value {
+    font-size: 1.4rem;
+    color: #fff;
+    font-weight: 800;
+}
+
+.profile-recent-weapon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-weapon-block {
+    text-align: center;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 20px;
+}
+
+.profile-weapon-block .profile-section-title--compact {
+    margin-bottom: 5px;
+}
+
+.profile-weapon-block__name {
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.profile-rr-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 60px;
+}
+
+.profile-rr-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    width: 25px;
+}
+
+.profile-rr-bar__label {
+    font-size: 10px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.profile-rr-bar--gain .profile-rr-bar__label {
+    color: #48a07a;
+}
+
+.profile-rr-bar--loss .profile-rr-bar__label {
+    color: #ff4655;
+}
+
+.profile-rr-bar__fill {
+    width: 8px;
+    height: var(--rr-fill-height, 0%);
+    min-height: 2px;
+    border-radius: 4px;
+}
+
+.profile-rr-bar--gain .profile-rr-bar__fill {
+    background-color: #48a07a;
+    box-shadow: 0 0 8px rgba(72, 160, 122, 0.38);
+}
+
+.profile-rr-bar--loss .profile-rr-bar__fill {
+    background-color: #ff4655;
+    box-shadow: 0 0 8px rgba(255, 70, 85, 0.38);
+}
+
+.profile-maps-wrapper {
+    display: flex;
+    gap: 15px;
+}
+
+.profile-map-card {
+    flex: 1;
+    min-height: 110px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    background-color: #121216;
+    box-sizing: border-box;
+}
+
+.profile-map-card__bg {
+    position: absolute;
+    inset: 0;
+    background-image: var(--profile-map-image, none);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 1;
+    transform: scale(1.02);
+}
+
+.profile-map-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(18, 18, 22, 1) 0%,
+        rgba(18, 18, 22, 0.9) 20%,
+        rgba(18, 18, 22, 0.5) 100%
+    );
+    z-index: 2;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.profile-map-card__name {
+    font-weight: 800;
+    color: #fff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+
+.profile-map-card__matches {
+    color: var(--text-sub);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.profile-map-card__winrate {
+    color: #e2b34e;
+    font-weight: 800;
+    font-size: 1.2rem;
+}
+
+.profile-role-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 12px 15px;
+    box-shadow:
+        inset 3px 3px 6px rgba(0, 0, 0, 0.6),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.03);
+    margin-bottom: 10px;
+}
+
+.profile-role-row__name {
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.profile-role-row__stats {
+    text-align: right;
+}
+
+.profile-role-row__wr {
+    color: #fff;
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.profile-role-row__matches {
+    color: var(--text-sub);
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.profile-agent-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow:
+        inset 3px 3px 6px rgba(0, 0, 0, 0.6),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.03);
+}
+
+.profile-agent-row__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    object-fit: cover;
+    background-color: #222;
+}
+
+.profile-agent-row__main {
+    font-weight: 800;
+    flex-grow: 1;
+    color: #fff;
+}
+
+.profile-agent-row__meta {
+    font-size: 10px;
+    color: var(--text-sub);
+    font-weight: 600;
+}
+
+.profile-agent-row__stats {
+    text-align: right;
+    color: var(--text-sub);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.profile-roles-list > .profile-role-row:last-child {
+    margin-bottom: 0;
+}
+@media (max-width: 830px) {
+    .main-header { padding: 0 20px; }
+    .player-card { flex-direction: column; text-align: center; gap: 20px; padding: 25px; }
+    #screen-hero h1 { font-size: 2.5rem; letter-spacing: 5px; }
+    .nav-links {
+    display: none; /* Ховаємо список */
+    }
+    
+    .burger-menu {
+    display: block; /* Показуємо гамбургер */
+    order: 3;
+    }
+    
+    /* Це щоб меню виїжджало зверху (для JS) */
+    .nav-links.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Центруємо пункти меню по вертикалі */
+    align-items: center; /* Центруємо по горизонталі */
+    opacity: 0;
+    animation: fadeInMenu 0.4s forwards;
+    position: fixed; /* Фіксуємо на весь екран */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    /* Напівпрозорий чорний у стилі Riot (з ефектом блюру) */
+    background-color: rgba(15, 25, 35, 0.95);
+    backdrop-filter: blur(10px); /* Той самий ефект матового скла */
+    z-index: 999; /* Щоб було поверх усього */
+    gap: 30px;
+    }
+    
+    @keyframes fadeInMenu {
+    from { opacity: 0; }
+    to { opacity: 1; }
+    }
+    
+    /* Робимо посилання великими, щоб зручно було тицяти пальцем */
+    .nav-links.active li a {
+    font-size: 2rem;
+    letter-spacing: 3px;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 700;
+    }
+    
+    /* Профіль: одна колонка на мобільних */
+    .profile-bento-grid {
+    grid-template-columns: 1fr !important;
+    gap: 15px;
+    padding: 10px;
+    }
+    .profile-banner {
+    grid-column: auto !important;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    }
+    .profile-maps-wrapper {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    }
+    .profile-map-card {
+    width: 100%;
+    flex: none;
+    }
+    .profile-banner__rank-meta {
+    text-align: left;
+    }
+    .profile-recent-weapon {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+    }
+    .profile-weapon-block {
+    text-align: center;
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 16px;
+    }
+    .profile-performance-grid {
+    grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Крок 2: лого → профіль → бургер */
+    .logo {
+    order: 1;
+    }
+    
+    .user-profile {
+    display: flex !important;
+    order: 2;
+    margin-left: auto;
+    margin-right: 15px;
+    font-size: 14px;
+    font-weight: 700;
+    }
+    }
