@@ -38,6 +38,28 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     };
 });
 
+const headerEl = document.querySelector('.main-header');
+let lastScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+window.addEventListener('scroll', () => {
+    if (window.innerWidth <= 830 && headerEl) {
+        const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Різниця скролу (щоб не ховалося від кожного пікселя)
+        if (Math.abs(currentScrollPosition - lastScrollPosition) < 10) return;
+
+        if (currentScrollPosition > lastScrollPosition && currentScrollPosition > 80) {
+            // Скрол вниз
+            headerEl.classList.add('header-hidden');
+        } else {
+            // Скрол вгору
+            headerEl.classList.remove('header-hidden');
+        }
+        
+        lastScrollPosition = currentScrollPosition <= 0 ? 0 : currentScrollPosition;
+    }
+}, { passive: true });
+
 // ШАБЛОН КАРТКИ З ДИНАМІЧНИМ СЯЙВОМ
 function createPlayerCard(p) {
     const smurfTag = p.isSmurf ? `<span class="smurf-tag" style="background:#fff;color:#000;padding:2px 6px;font-size:10px;margin-left:10px;border-radius:3px;">SMURF</span>` : '';
@@ -49,7 +71,7 @@ function createPlayerCard(p) {
                  <h3>${p.name} ${smurfTag}</h3>
                  <small>${p.agent} | ${p.rank}</small>
              </div>
-             <button class="connect-btn request-player-btn">Request</button>
+             <button class="connect-btn request-player-btn" onclick="openModal('Скопіювати Riot ID', '${p.name}')">Request</button>
          </div>
          
          <div class="player-stats-dropdown" style="width: 100%;">
@@ -95,7 +117,7 @@ function renderCustoms(data) {
                 </div>
                 <div class="slots-info">${m.players}</div>
                 <div class="card-actions">
-                    <button type="button" class="connect-btn">Join</button>
+                    <button type="button" class="connect-btn" onclick="openModal('Скопіювати Party Code', '${m.partyCode}')">Join</button>
                 </div>
             </div>
         `
@@ -149,7 +171,7 @@ function renderTournaments(data) {
                                 </div>
                                 <div class="card-footer">
                                     <span class="teams-count">Гравці: ${t.teams}</span>
-                                    <button type="button" class="request-btn">Взяти участь</button>
+                                    <button type="button" class="connect-btn" onclick="window.openTournamentDetails('${t.title}')">Деталі</button>
                                 </div>
                             </div>
                         </div>
@@ -351,3 +373,63 @@ document.body.addEventListener('click', (e) => {
         card.classList.toggle('expanded');
     }
 });
+
+const modal = document.getElementById('copy-modal');
+const modalTitle = document.getElementById('modal-title');
+const modalText = document.getElementById('modal-text');
+const copyFeedback = document.getElementById('copy-feedback');
+let currentTextToCopy = '';
+
+// Додали window. перед назвою, і = function замість просто function
+window.openModal = function(title, text) {
+    modalTitle.innerText = title;
+    modalText.innerText = text;
+    currentTextToCopy = text;
+    copyFeedback.classList.add('hidden'); 
+    modal.classList.remove('hidden');
+}
+
+window.closeModal = function() {
+    modal.classList.add('hidden');
+}
+
+// Змінили виклик на window.closeModal()
+modal.addEventListener('click', (e) => {
+    if (e.target === modal) window.closeModal();
+});
+
+// Тут теж додали window. і перенесли async
+window.copyToClipboard = async function() {
+    try {
+        await navigator.clipboard.writeText(currentTextToCopy);
+        copyFeedback.classList.remove('hidden'); 
+    } catch (err) {
+        console.error('Помилка копіювання: ', err);
+    }
+}
+// --- Логіка сторінки Турніру ---
+window.openTournamentDetails = function(title) {
+    // 1. Міняємо назву
+    const tourneyTitle = document.getElementById('tourney-details-title');
+    if (tourneyTitle) tourneyTitle.innerText = title;
+
+    // 2. Запускаємо твій алгоритм балансування
+    if (window.generateTournamentBracket) {
+        window.generateTournamentBracket();
+    }
+    
+    // 3. Перемикаємо екран
+    showSection('screen-tournament');
+};
+
+// Розкриття плашок на весь екран
+window.toggleFullscreen = function(elementId) {
+    const el = document.getElementById(elementId);
+    if (el) {
+        el.classList.toggle('fullscreen-expanded');
+        // Ховаємо скрол на фоні, коли відкрито на весь екран
+        document.body.style.overflow = el.classList.contains('fullscreen-expanded') ? 'hidden' : '';
+    }
+};
+// Робимо функцію зміни секцій глобальною, щоб HTML її бачив
+window.showSection = showSection;

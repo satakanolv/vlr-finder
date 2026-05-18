@@ -929,8 +929,382 @@ body::after {
 .profile-roles-list > .profile-role-row:last-child {
     margin-bottom: 0;
 }
+    /* --- МОДАЛКА (В ЄДИНОМУ СТИЛІ З САЙТОМ) --- */
+.modal {
+    position: fixed;
+    inset: 0;
+    /* Затемнення як у твого хедера */
+    background: rgba(11, 14, 20, 0.85); 
+    backdrop-filter: blur(20px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 30px 40px;
+    text-align: center;
+    position: relative;
+    min-width: 350px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+    
+    /* Додаємо магію анімації: opacity + пружинний scale */
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+}
+
+/* Стан, коли модалка схована (зменшена і опущена вниз) */
+.modal.hidden .modal-content {
+    opacity: 0;
+    transform: scale(0.85) translateY(40px);
+}
+
+.modal-content h3 {
+    color: var(--text-main);
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    color: var(--text-sub);
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover { 
+    color: #fff; 
+    text-shadow: 0 0 10px rgba(255,255,255,0.5); /* Як у твоїх лінків у навігації */
+}
+
+.copy-box {
+    /* Стиль взято з твоїх комірок статистики (profile-stat-cell) */
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-soft);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--text-main);
+    transition: all 0.3s ease;
+    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.6), inset -3px -3px 6px rgba(255, 255, 255, 0.03);
+}
+
+.copy-box:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.copy-icon {
+    font-size: 1.2rem;
+    opacity: 0.7;
+}
+
+.feedback-text {
+    display: block;
+    margin-top: 15px;
+    color: #E5E5E5;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    height: 20px;
+    
+    /* Анімація тексту */
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.feedback-text.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px); /* Текст буде ніби падати зверху */
+}
+/* --- КЕЙФРЕЙМИ ДЛЯ МОДАЛКИ --- */
+@keyframes modalBounce {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Запускаємо анімацію тільки коли модалка ВІДКРИТА (тобто немає класу hidden) */
+.modal:not(.hidden) .modal-content {
+    animation: modalBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+/* --- КЕЙФРЕЙМИ ДЛЯ ЗАКРИТТЯ І ТЕКСТУ --- */
+
+/* 1. Анімація для ЗАКРИТТЯ модалки (падає вниз і зникає) */
+@keyframes modalBounceOut {
+    0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.85) translateY(40px);
+    }
+}
+
+/* 2. Анімація для тексту "Скопійовано!" (виринає з пружинкою) */
+@keyframes textPopUp {
+    0% {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Запускаємо закриття, коли на модалці Є клас hidden */
+.modal.hidden .modal-content {
+    animation: modalBounceOut 0.3s ease-in forwards;
+}
+
+/* Запускаємо анімацію тексту, коли з нього ЗНІМАЮТЬ клас hidden */
+.feedback-text:not(.hidden) {
+    animation: textPopUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+/* --- СЕКЦІЯ ТУРНІРУ --- */
+.interactive-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-soft);
+    padding: 25px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+}
+
+.interactive-panel:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-soft);
+    padding-bottom: 15px;
+}
+
+.panel-header h3 {
+    color: var(--text-main);
+    font-size: 1.2rem;
+}
+
+.expand-hint {
+    font-size: 0.85rem;
+    color: var(--text-sub);
+    transition: color 0.3s;
+}
+
+.interactive-panel:hover .expand-hint {
+    color: #fff;
+}
+
+/* --- ПОВНОЕКРАННИЙ РЕЖИМ ПЛАШКИ --- */
+.fullscreen-expanded {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 9999 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    overflow-y: auto !important;
+    cursor: default;
+    background: rgba(11, 14, 20, 0.95) !important; /* Темний фон з малим прозорим ефектом */
+    backdrop-filter: blur(20px);
+}
+
+.fullscreen-expanded .expand-hint::before {
+    content: "✖ Закрити";
+    color: #ff4655; /* Робимо хрестик акцентним */
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.fullscreen-expanded .expand-hint {
+    font-size: 0; /* Ховаємо текст "Клікни щоб розгорнути" */
+}
+
+/* Прибираємо ефект наведення у повноекранному режимі */
+.fullscreen-expanded:hover {
+    transform: none;
+    border-color: transparent;
+}
+
+/* --- СТИЛІ ДЛЯ КАРТОК КОМАНД (GENERATED) --- */
+.team-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.team-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px); /* Легкий зсув при наведенні */
+}
+
+.team-card strong {
+    color: var(--text-main);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.team-card span {
+    font-family: 'Inter', sans-serif;
+    background: rgba(255, 70, 85, 0.1); /* Легкий червоний фон для RR */
+    color: #ff4655;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.player-tag {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--text-sub);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-top: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+.player-tag:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.player-tag small {
+    opacity: 0.5;
+    margin-left: 4px;
+}
+/* --- ГРАФІЧНА СІТКА (ОНОВЛЕНА) --- */
+.bracket-wrapper {
+    display: flex;
+    gap: 30px;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px;
+    overflow-x: auto; /* Щоб на малих екранах можна було гортати */
+}
+
+.bracket-round {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Збільшуємо відступи для наступних раундів, щоб лінії сходилися */
+.bracket-round:nth-child(2) { gap: 110px; }
+.bracket-round:nth-child(3) { gap: 0; justify-content: center; }
+
+.bracket-match {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    width: 180px;
+    position: relative;
+}
+
+/* Колір цифр (RR або рахунок) — робимо нейтральним */
+.bracket-team span {
+    color: var(--text-sub); /* Був червоний, став сірий */
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.bracket-team.win {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.bracket-team.win span {
+    color: var(--text-main); /* Переможець підсвічується яскравіше */
+}
+
+/* Фінальний матч — замість червоного робимо біле свічення */
+.bracket-match.final {
+    border-color: var(--text-sub);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Прибираємо червоний з карток команд у списку */
+.team-card span {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: var(--text-main) !important;
+}
+
 @media (max-width: 830px) {
-    .main-header { padding: 0 20px; }
+    .main-header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 0 20px; /* Твій старий падінг */
+        background: var(--bg-main);
+        /* Твоя нова анімація і плавність */
+        transition: transform 0.4s cubic-bezier(0.3, 1, 0.3, 1), opacity 0.3s ease !important;
+    }
+
+    /* 2. Стан для ховання (додається через JS) */
+    .main-header.header-hidden {
+        transform: translateY(-100%) !important;
+        opacity: 0 !important;
+    }
+
+    /* 3. Анімація появи (клас .show додається твоїм основним скриптом) */
+    .main-header.show { 
+        display: flex; 
+        animation: slideDownFade 0.4s cubic-bezier(0.3, 1, 0.3, 1) forwards; 
+    }
+    
     .player-card { flex-direction: column; text-align: center; gap: 20px; padding: 25px; }
     #screen-hero h1 { font-size: 2.5rem; letter-spacing: 5px; }
     .nav-links {
@@ -1029,4 +1403,77 @@ body::after {
     font-size: 14px;
     font-weight: 700;
     }
-    }
+
+        /* 1. Повноекранне вікно (Деталі турніру) */
+        .fullscreen-expanded {
+            padding: 15px !important;
+            background: var(--bg-main) !important; /* На мобайлі краще суцільний фон */
+        }
+    
+        .panel-header {
+            flex-direction: row; /* Залишаємо в ряд, але зменшуємо шрифт */
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+    
+        .panel-header h3 {
+            font-size: 1rem;
+        }
+    
+        /* 2. Контейнер для списку команд (Робимо в одну колонку) */
+        #teams-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+    
+        .team-card {
+            margin-bottom: 0;
+            padding: 12px;
+        }
+    
+        .team-card strong {
+            font-size: 0.95rem;
+        }
+    
+        /* 3. ГОЛОВНЕ: Адаптив сітки (Bracket) */
+        .bracket-wrapper {
+            min-width: 650px; /* Примусово розширюємо сітку, щоб вона не стискалася */
+            padding: 10px 5px;
+            gap: 20px;
+        }
+    
+        /* Додаємо контейнеру сітки можливість скролу */
+        #bracket-container {
+            overflow-x: auto; /* Дозволяємо горизонтальний скрол */
+            -webkit-overflow-scrolling: touch; /* Плавність для iPhone */
+            margin: 0 -15px; /* Витягуємо скрол на всю ширину екрана */
+            padding: 0 15px 15px 15px;
+        }
+    
+        /* Приховуємо дефолтний некрасивий скролбар, робимо його тонким */
+        #bracket-container::-webkit-scrollbar {
+            height: 3px;
+        }
+    
+        #bracket-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+    
+        /* 4. Теги гравців */
+        .player-tag {
+            padding: 3px 8px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+        }
+    
+        /* Кнопка закриття (✖ Закрити) */
+        .fullscreen-expanded .expand-hint::before {
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            background: rgba(255, 70, 85, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 70, 85, 0.2);
+        }
+}

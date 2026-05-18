@@ -57,6 +57,49 @@
 
     <section id="player-profile" class="hidden">
     </section>
+
+    <div id="copy-modal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h3 id="modal-title">Riot ID / Party Code</h3>
+        <div class="copy-box" onclick="copyToClipboard()">
+            <span id="modal-text">Тут буде текст</span>
+            <span class="copy-icon">📋</span>
+        </div>
+        <span id="copy-feedback" class="feedback-text hidden">Скопійовано! ✔</span>
+    </div>
+    </div>
+
+    <section id="screen-tournament" class="screen hidden">
+        <div class="container">
+            <button class="back-btn" onclick="showSection('tournament-hub')" style="margin-bottom: 20px; background: none; border: none; color: var(--text-sub); cursor: pointer; font-size: 1.1rem; font-weight: bold; transition: color 0.3s;">
+                ← Назад до турнірів
+            </button>
+            
+            <h1 id="tourney-details-title" style="margin-bottom: 30px; font-size: 2.5rem; color: var(--text-main);">Назва турніру</h1>
+            
+            <div class="tournament-bento" style="display: grid; gap: 20px;">
+                <div id="tourney-players" class="interactive-panel" onclick="window.toggleFullscreen('tourney-players')">
+                    <div class="panel-header">
+                        <h3>Список команд / Гравців 👥</h3>
+                        <span class="expand-hint">Клікни, щоб розгорнути</span>
+                    </div>
+                    <div id="teams-container" class="panel-content">
+                    </div>
+                </div>
+    
+                <div id="tourney-bracket" class="interactive-panel" onclick="window.toggleFullscreen('tourney-bracket')">
+                    <div class="panel-header">
+                        <h3>Турнірна сітка 🏆</h3>
+                        <span class="expand-hint">Клікни, щоб розгорнути</span>
+                    </div>
+                    <div id="bracket-container" class="panel-content">
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     
     <script type="module" src="script.js"></script>
 </body>

@@ -69,6 +69,7 @@ export const customMatches = [
         rank: "Immortal+",
         players: "8/10",
         status: "Open",
+        partyCode: "APX005",
         mapImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLoQRAn4Epc0jcy7jWeg-fegGlZpvpc_LeCA&s"
     },
     {
@@ -78,6 +79,7 @@ export const customMatches = [
         rank: "Any",
         players: "4/10",
         status: "Open",
+        partyCode: "KO3F03",
         mapImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR92QZi8R-rM6H_7Q-Ez6WvYfHYumbCzrCpQg&s"
     }
 ];
